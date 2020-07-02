@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D1A1C1D5-DF99-4920-8752-7DF85E080C06}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7DE3BCDB-C610-400E-85A0-5996B95EE5A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projeto42.SonarQube.Core", "src\Projeto42.SonarQube.Core\Projeto42.SonarQube.Core.csproj", "{252CEF4F-28D5-4458-8DB9-34F424D4A8FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projeto42.SonarQube.WebApi", "src\Projeto42.SonarQube.WebApi\Projeto42.SonarQube.WebApi.csproj", "{A4685A3E-9462-473E-A434-B8100EB4A106}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projeto42.SonarQube.WebApi.Test", "test\Projeto42.SonarQube.WebApi.Test\Projeto42.SonarQube.WebApi.Test.csproj", "{D9A7223B-7509-473C-B811-AACCE6BE612E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{252CEF4F-28D5-4458-8DB9-34F424D4A8FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{252CEF4F-28D5-4458-8DB9-34F424D4A8FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{252CEF4F-28D5-4458-8DB9-34F424D4A8FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{252CEF4F-28D5-4458-8DB9-34F424D4A8FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4685A3E-9462-473E-A434-B8100EB4A106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4685A3E-9462-473E-A434-B8100EB4A106}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4685A3E-9462-473E-A434-B8100EB4A106}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4685A3E-9462-473E-A434-B8100EB4A106}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9A7223B-7509-473C-B811-AACCE6BE612E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9A7223B-7509-473C-B811-AACCE6BE612E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9A7223B-7509-473C-B811-AACCE6BE612E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9A7223B-7509-473C-B811-AACCE6BE612E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{252CEF4F-28D5-4458-8DB9-34F424D4A8FB} = {D1A1C1D5-DF99-4920-8752-7DF85E080C06}
+		{A4685A3E-9462-473E-A434-B8100EB4A106} = {D1A1C1D5-DF99-4920-8752-7DF85E080C06}
+		{D9A7223B-7509-473C-B811-AACCE6BE612E} = {7DE3BCDB-C610-400E-85A0-5996B95EE5A5}
+	EndGlobalSection
+EndGlobal

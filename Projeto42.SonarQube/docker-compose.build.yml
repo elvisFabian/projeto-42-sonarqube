@@ -1,0 +1,8 @@
+version: '3.5'
+
+services:
+  projeto42-sonarqube:
+    image: projeto42/sonarqube:latest
+    build:
+      context: .
+      dockerfile: src/Projeto42.SonarQube.WebApi/Dockerfile

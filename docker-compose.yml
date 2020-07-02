@@ -11,7 +11,7 @@ services:
   sonarqube:
     image: docker.io/bitnami/sonarqube:7-debian-10
     ports:
-      - '80:9000'
+      - '4000:9000'
     environment:
       - POSTGRESQL_HOST=postgresql
       - POSTGRESQL_ROOT_USER=postgres
