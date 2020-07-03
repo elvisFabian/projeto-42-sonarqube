@@ -16,7 +16,7 @@ export SONARQUBE_PASSWORD=${SONARQUBE_PASSWORD:-bitnami}
 export SONARQUBE_PROJECT=${SONARQUBE_PROJECT:-projeto42.sonarqube.com.br}
 export SONARQUBE_PROJECT_VERSION=${VERSION}
 
-export CONTAINER_NAME="ci-tests-artifacts"
+export CONTAINER_NAME="ci-tests-artifacts-${VERSION}"
 
 echo 'Iniciando docker-compose build'
 docker-compose -f Projeto42.SonarQube/docker-compose.ci.yml up --build --force-recreate --abort-on-container-exit
