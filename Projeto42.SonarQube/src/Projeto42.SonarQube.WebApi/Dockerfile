@@ -45,6 +45,7 @@ COPY . .
 FROM restore as tests
 COPY ./entrypoint-tests.sh ./entrypoint-tests.sh
 RUN chmod +x ./entrypoint-tests.sh
+ENTRYPOINT ./entrypoint-tests.sh
 
 #Target: Build
 FROM restore as build

@@ -6,23 +6,21 @@
 # Microsoft.CodeCoverage
 # XunitXml.TestLogger
 
-echo "Iniciando entrypoint"
+echo "Iniciando entrypoint - TESTS"
 
 if [[ ${RUN_TEST} = "true" ]]; then
-
-    #Análise de T-SQL code
-    #https://marketplace.visualstudio.com/items?itemName=Ubitsoft.sql-enlight-vsts-extension
     if [[ ${RUN_SONARQUBE} = "true" ]]; then
         echo "-------------------------------------------------------"
         echo "Sonar properties"
         echo "SONARQUBE_PROJECT: $SONARQUBE_PROJECT"
         echo "SONARQUBE_PROJECT_VERSION: $SONARQUBE_PROJECT_VERSION"
         echo "SONARQUBE_URL: $SONARQUBE_URL"
+        echo "SONARQUBE_LOGIN: $SONARQUBE_LOGIN"
+        echo "SONARQUBE_PASSWORD: $SONARQUBE_PASSWORD"
         echo "-------------------------------------------------------"
 
-        #dotnet sonarscanner não aceita SONARQUBE_PASSWORD em branco
-        #/d:sonar.password=$SONARQUBE_PASSWORD
-        dotnet sonarscanner begin /k:"$SONARQUBE_PROJECT" /v:"$SONARQUBE_PROJECT_VERSION" /d:sonar.login=$SONARQUBE_LOGIN /d:sonar.host.url=${SONARQUBE_URL} /d:sonar.cs.vstest.reportsPaths="${RESULT_PATH}*.trx" /d:sonar.cs.opencover.reportsPaths="${COVERAGE_PATH}**/coverage.opencover.xml" || true;
+        dotnet sonarscanner begin /k:"$SONARQUBE_PROJECT" /v:"$SONARQUBE_PROJECT_VERSION" /d:sonar.password=$SONARQUBE_PASSWORD /d:sonar.login=$SONARQUBE_LOGIN /d:sonar.host.url=${SONARQUBE_URL} \
+            /d:sonar.cs.vstest.reportsPaths="${RESULT_PATH}*.trx" /d:sonar.cs.opencover.reportsPaths="${COVERAGE_PATH}**/coverage.opencover.xml" || true;
     fi
 
     #code coverage para testes de integraçao
@@ -57,6 +55,6 @@ if [[ ${RUN_TEST} = "true" ]]; then
     reportgenerator "-reports:${COVERAGE_PATH}coverage.cobertura.xml" "-targetdir:$COVERAGE_REPORT_PATH" -reporttypes:"HTMLInline" -verbosity:Error || true;
 
     if [[ ${RUN_SONARQUBE} = "true" ]]; then
-        dotnet sonarscanner end /d:sonar.login="${SONAR_LOGIN}" || true;
+        dotnet sonarscanner end /d:sonar.password=$SONARQUBE_PASSWORD /d:sonar.login=$SONARQUBE_LOGIN || true;
     fi
 fi

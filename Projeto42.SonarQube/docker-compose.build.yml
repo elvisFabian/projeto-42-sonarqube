@@ -6,3 +6,4 @@ services:
     build:
       context: .
       dockerfile: src/Projeto42.SonarQube.WebApi/Dockerfile
+      target: runtime
