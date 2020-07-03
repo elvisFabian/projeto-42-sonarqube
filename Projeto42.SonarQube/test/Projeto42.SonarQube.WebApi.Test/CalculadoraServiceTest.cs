@@ -20,13 +20,5 @@ namespace Projeto42.SonarQube.WebApi.Test
 
             Assert.Equal(2, result);
         }
-        
-        //[Fact]
-        public void Quebrar_pra_ver_comportamento()
-        {
-            var result = _calculadoraService.Somar(1, 1);
-
-            Assert.Equal(99, result);
-        }
     }
 }

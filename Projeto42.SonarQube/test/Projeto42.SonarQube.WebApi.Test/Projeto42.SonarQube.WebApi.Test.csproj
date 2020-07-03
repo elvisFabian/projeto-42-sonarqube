@@ -8,8 +8,10 @@
 
     <ItemGroup>
         <PackageReference Include="coverlet.msbuild" Version="2.9.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="3.1.5" />
         <PackageReference Include="Microsoft.CodeCoverage" Version="16.6.1" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+        <PackageReference Include="RestEase" Version="1.5.0" />
         <PackageReference Include="xunit" Version="2.4.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
         <PackageReference Include="coverlet.collector" Version="1.0.1" />
@@ -18,6 +20,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Projeto42.SonarQube.Core\Projeto42.SonarQube.Core.csproj" />
+      <ProjectReference Include="..\..\src\Projeto42.SonarQube.WebApi\Projeto42.SonarQube.WebApi.csproj" />
     </ItemGroup>
 
 </Project>

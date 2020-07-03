@@ -13,14 +13,20 @@ ARG SONAR_SCANNER_NUGET_VERSION="4.9.0"
 ARG SONAR_SCANNER_BIN_VERSION="4.3.0.2102"
 ARG SONAR_SCANNER_NETCORE_VERSION="netcoreapp3.0"
 ARG REPORTGENERATOR_NUGET_VERSION="4.6.1"
+ARG COVERLET_CONSOLE_NUGET_VERSION="1.7.2"
 
 #--------------------------------------Instalando ferramentas globalmente----------------------#
 RUN dotnet tool install --global dotnet-sonarscanner --version ${SONAR_SCANNER_NUGET_VERSION} && \
-    dotnet tool install --global dotnet-reportgenerator-globaltool --version ${REPORTGENERATOR_NUGET_VERSION}
+    dotnet tool install --global dotnet-reportgenerator-globaltool --version ${REPORTGENERATOR_NUGET_VERSION} && \
+    dotnet tool install --global coverlet.console --version ${COVERLET_CONSOLE_NUGET_VERSION}
+
 ENV PATH "$PATH:/root/.dotnet/tools/"
 RUN chmod +x /root/.dotnet/tools/.store/dotnet-sonarscanner/${SONAR_SCANNER_NUGET_VERSION}/dotnet-sonarscanner/${SONAR_SCANNER_NUGET_VERSION}/tools/${SONAR_SCANNER_NETCORE_VERSION}/any/sonar-scanner-${SONAR_SCANNER_BIN_VERSION}/bin/sonar-scanner
 #----------------------------------------------------------------------------------------------#
 
+ARG CONFIGURATION="Release"
+
+ENV CONFIGURATION=$CONFIGURATION
 ENV RESULT_PATH="/TestResults/result/vsTest/"
 ENV COVERAGE_PATH="/TestResults/codecoverage/"
 ENV COVERAGE_REPORT_PATH="/TestResults/codecoverage/Report/"
@@ -50,8 +56,8 @@ ENTRYPOINT ./entrypoint-tests.sh
 
 #Target: Build
 FROM restore as build
-RUN dotnet build ${SOLUTION_NAME} -c Release -v m
-RUN dotnet publish src/Projeto42.SonarQube.WebApi -c Release --no-build -o /app/www -v m
+RUN dotnet build ${SOLUTION_NAME} -c  ${CONFIGURATION} -v m
+RUN dotnet publish src/Projeto42.SonarQube.WebApi -c  ${CONFIGURATION} --no-build -o /app/www -v m
 
 #Target: runtime
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 as runtime
