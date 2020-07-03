@@ -14,16 +14,17 @@ ARG SONAR_SCANNER_BIN_VERSION="4.3.0.2102"
 ARG SONAR_SCANNER_NETCORE_VERSION="netcoreapp3.0"
 ARG REPORTGENERATOR_NUGET_VERSION="4.6.1"
 
-ENV RESULT_PATH="/TestResults/result/vsTest/"
-ENV COVERAGE_PATH="/TestResults/codecoverage/"
-ENV COVERAGE_REPORT_PATH="/TestResults/codecoverage/Report/"
-#----------------------------------------------------------------------------------------------#
-
 #--------------------------------------Instalando ferramentas globalmente----------------------#
 RUN dotnet tool install --global dotnet-sonarscanner --version ${SONAR_SCANNER_NUGET_VERSION} && \
     dotnet tool install --global dotnet-reportgenerator-globaltool --version ${REPORTGENERATOR_NUGET_VERSION}
 ENV PATH "$PATH:/root/.dotnet/tools/"
 RUN chmod +x /root/.dotnet/tools/.store/dotnet-sonarscanner/${SONAR_SCANNER_NUGET_VERSION}/dotnet-sonarscanner/${SONAR_SCANNER_NUGET_VERSION}/tools/${SONAR_SCANNER_NETCORE_VERSION}/any/sonar-scanner-${SONAR_SCANNER_BIN_VERSION}/bin/sonar-scanner
+#----------------------------------------------------------------------------------------------#
+
+ENV RESULT_PATH="/TestResults/result/vsTest/"
+ENV COVERAGE_PATH="/TestResults/codecoverage/"
+ENV COVERAGE_REPORT_PATH="/TestResults/codecoverage/Report/"
+ENV SOLUTION_NAME="Projeto42.SonarQube.sln"
 #----------------------------------------------------------------------------------------------#
 
 #Copia os csproj e restaura (cache only)
@@ -37,7 +38,7 @@ RUN for file in $(ls *.csproj); do mkdir -p src/${file%.*}/ && mv $file src/${fi
 COPY test/*/*.csproj ./
 RUN for file in $(ls *.csproj); do mkdir -p test/${file%.*}/ && mv $file test/${file%.*}/; done
 
-RUN dotnet restore Projeto42.SonarQube.sln -v m
+RUN dotnet restore ${SOLUTION_NAME} -v m
 
 COPY . .
 
@@ -49,7 +50,7 @@ ENTRYPOINT ./entrypoint-tests.sh
 
 #Target: Build
 FROM restore as build
-RUN dotnet build Projeto42.SonarQube.sln -c Release -v m
+RUN dotnet build ${SOLUTION_NAME} -c Release -v m
 RUN dotnet publish src/Projeto42.SonarQube.WebApi -c Release --no-build -o /app/www -v m
 
 #Target: runtime

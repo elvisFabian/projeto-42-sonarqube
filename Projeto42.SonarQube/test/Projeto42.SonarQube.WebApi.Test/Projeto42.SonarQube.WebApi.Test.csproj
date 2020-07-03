@@ -16,4 +16,8 @@
         <PackageReference Include="XunitXml.TestLogger" Version="2.1.26" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Projeto42.SonarQube.Core\Projeto42.SonarQube.Core.csproj" />
+    </ItemGroup>
+
 </Project>
