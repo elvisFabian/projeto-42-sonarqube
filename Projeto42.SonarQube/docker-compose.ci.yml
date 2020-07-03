@@ -1,0 +1,17 @@
+version: '3.5'
+
+services:
+  projeto42-sonarqube:
+    image: ${DOCKER_REGISTRY}projeto42/sonarqube:${BRANCH}-tests
+    container_name: ci-tests-artifacts
+    build:
+      context: .
+      dockerfile: src/Projeto42.SonarQube.WebApi/Dockerfile
+      target: tests
+    environment:
+      RUN_SONARQUBE: ${RUN_SONARQUBE}
+      SONARQUBE_URL: ${SONARQUBE_URL}
+      SONARQUBE_PASSWORD: ${SONARQUBE_PASSWORD}
+      SONARQUBE_LOGIN: ${SONARQUBE_LOGIN}
+      SONARQUBE_PROJECT: ${SONARQUBE_PROJECT}
+      SONARQUBE_PROJECT_VERSION: ${VERSION}
