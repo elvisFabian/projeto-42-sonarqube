@@ -6,14 +6,14 @@
 # Microsoft.CodeCoverage
 # XunitXml.TestLogger
 
+CoverletOutputFormat="cobertura,opencover"
+REPORT_GENERATOR_REPORTS=""
+REPORT_GENERATOR_REPORT_TYPES="HTMLInline"
+
+
 echo ""
 echo "-------------------------------------------------------"
 echo "Iniciando entrypoint - entrypoint-tests.sh"
-
-#code coverage para testes de integraçao
-#https://github.com/OpenCover/opencover/issues/668
-#https://github.com/tonerdo/coverlet/issues/161 => multiple CoverletOutputFormat
-CoverletOutputFormat="cobertura,opencover"
 
 echo ""
 echo "-------------------------------------------------------"
@@ -26,7 +26,6 @@ echo "COVERAGE_REPORT_PATH: $COVERAGE_REPORT_PATH"
 echo "-------------------------------------------------------"
 
 
-
 if [[ ${RUN_SONARQUBE} = "true" ]]; then
     echo ""
     echo "-------------------------------------------------------"
@@ -34,18 +33,18 @@ if [[ ${RUN_SONARQUBE} = "true" ]]; then
     echo "SONARQUBE_PROJECT: $SONARQUBE_PROJECT"
     echo "SONARQUBE_PROJECT_VERSION: $SONARQUBE_PROJECT_VERSION"
     echo "SONARQUBE_URL: $SONARQUBE_URL"
-    echo "SONARQUBE_LOGIN: $SONARQUBE_LOGIN"
-    echo "SONARQUBE_PASSWORD: $SONARQUBE_PASSWORD"
     echo "-------------------------------------------------------"
 
-    dotnet sonarscanner begin /k:"$SONARQUBE_PROJECT" /v:"$SONARQUBE_PROJECT_VERSION" /d:sonar.password=$SONARQUBE_PASSWORD /d:sonar.login=$SONARQUBE_LOGIN /d:sonar.host.url=${SONARQUBE_URL} \
+    dotnet sonarscanner begin \
+        /k:"$SONARQUBE_PROJECT" \
+        /v:"$SONARQUBE_PROJECT_VERSION" \
+        /d:sonar.verbose=false \
+        /d:sonar.login=$SONARQUBE_TOKEN \
+        /d:sonar.host.url=${SONARQUBE_URL} \
         /d:sonar.cs.vstest.reportsPaths="${RESULT_PATH}*.trx" \
         /d:sonar.cs.opencover.reportsPaths="${COVERAGE_PATH}**/coverage.opencover.xml" || true;
-        #/d:sonar.cs.xunit.reportsPaths="${RESULT_PATH}*.xml" \
 fi
 
-
-#necessário rodar o dotnet build entre o begin e end do sonarqube
 echo ""
 echo "--------------Iniciando dotnet build $SOLUTION_NAME"
 dotnet build $SOLUTION_NAME -v q --no-restore
@@ -57,42 +56,43 @@ echo "--------------Iniciando dotnet test"
 #https://github.com/tonerdo/coverlet
 #https://www.nuget.org/packages/coverlet.console/
 
-#DOTNET_TEST="dotnet test $SOLUTION_NAME --no-build --no-restore -v m --logger \"trx;LogFileName=TestResults.trx\" --results-directory $RESULT_PATH /p:CollectCoverage=true /p:CoverletOutput=$COVERAGE_PATH /p:CoverletOutputFormat=\"$CoverletOutputFormat\""
-#$DOTNET_TEST || true;
+#dotnet test $SOLUTION_NAME --no-build --no-restore -v m --logger \"trx;LogFileName=TestResults.trx\" --results-directory $RESULT_PATH /p:CollectCoverage=true /p:CoverletOutput=$COVERAGE_PATH /p:CoverletOutputFormat=\"$CoverletOutputFormat\""
 
-reportgenerator_reports=""
 
 for testFolder in $(ls test); do \
-    echo $testFolder
+    echo ""
+    echo " - $testFolder"
+    echo ""
 
-    echo '------dotnet test------' & \
+    CURRENT_COVERLET_OUTPUT_PATH="${COVERAGE_PATH}${testFolder}"
+    REPORT_GENERATOR_REPORTS="${CURRENT_COVERLET_OUTPUT_PATH}/coverage.cobertura.xml;$REPORT_GENERATOR_REPORTS"
+
     dotnet test test/$testFolder --no-build --no-restore -v q -c ${CONFIGURATION} \
         --results-directory "${RESULT_PATH}/" \
         --logger "trx;LogFileName=${testFolder}.trx" \
         --logger "xunit;LogFilePath=${RESULT_PATH}${testFolder}.xml"; \
         exit 0 & \
 
-    echo '------coverlet test------' & \
-    COVERLET_OUTPUT="${COVERAGE_PATH}${testFolder}"
-    coverlet test/${testFolder}/bin/${CONFIGURATION}/*/${testFolder}.dll --target "dotnet" --targetargs "test test/${testFolder} --no-build -c ${CONFIGURATION}" --format opencover --format cobertura --output "${COVERLET_OUTPUT}/"; \
-
-    echo COVERLET_OUTPUT
-    reportgenerator_reports="$reportgenerator_reports;${COVERLET_OUTPUT}/coverage.cobertura.xml"
+    coverlet test/${testFolder}/bin/${CONFIGURATION}/*/${testFolder}.dll \
+        --target "dotnet" \
+        --targetargs "test test/${testFolder} --no-build -c ${CONFIGURATION}" \
+        --format opencover \
+        --format cobertura \
+        --output "${CURRENT_COVERLET_OUTPUT_PATH}/"; \
 done;
 
 
-#https://danielpalme.github.io/ReportGenerator/usage.html
-reporttypes="HTMLInline"
 echo ""
-echo "--------------Iniciando reportgenerator"
-echo "reportgenerator_reports: $reportgenerator_reports"
+echo "-------------------------------------------------------"
+echo "reportgenerator properties"
+echo "REPORT_GENERATOR_REPORTS: $REPORT_GENERATOR_REPORTS"
 echo "COVERAGE_REPORT_PATH: $COVERAGE_REPORT_PATH"
-echo "reporttypes: $reporttypes"
-
-reportgenerator "-reports:${reportgenerator_reports}" "-targetdir:$COVERAGE_REPORT_PATH" -reporttypes:"${reporttypes}" -verbosity:Info || true;
-
+echo "REPORT_GENERATOR_REPORT_TYPES: $REPORT_GENERATOR_REPORT_TYPES"
 echo "-------------------------------------------------------"
 
+reportgenerator "-reports:${REPORT_GENERATOR_REPORTS}" "-targetdir:$COVERAGE_REPORT_PATH" -reporttypes:"${REPORT_GENERATOR_REPORT_TYPES}" -verbosity:Error || true;
+
+
 if [[ ${RUN_SONARQUBE} = "true" ]]; then
-    dotnet sonarscanner end /d:sonar.password=$SONARQUBE_PASSWORD /d:sonar.login=$SONARQUBE_LOGIN || true;
+    dotnet sonarscanner end /d:sonar.login=$SONARQUBE_TOKEN || true;
 fi

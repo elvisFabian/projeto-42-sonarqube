@@ -14,6 +14,10 @@
 ## Ambiente
 - [bitnami/sonarqube](https://hub.docker.com/r/bitnami/sonarqube/)
 
+```sh
+docker-compose up -d docker.compose.yml up -d
+```
+
 ## sonarscanner - NetCore
 Necessário instalar os seguintes pacotes nos projetos de teste
 - [coverlet.msbuild](https://www.nuget.org/packages/coverlet.msbuild/)
