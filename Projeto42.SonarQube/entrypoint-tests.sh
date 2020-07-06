@@ -41,7 +41,6 @@ if [[ ${RUN_SONARQUBE} = "true" ]]; then
     dotnet sonarscanner begin /k:"$SONARQUBE_PROJECT" /v:"$SONARQUBE_PROJECT_VERSION" /d:sonar.password=$SONARQUBE_PASSWORD /d:sonar.login=$SONARQUBE_LOGIN /d:sonar.host.url=${SONARQUBE_URL} \
         /d:sonar.cs.vstest.reportsPaths="${RESULT_PATH}*.trx" \
         /d:sonar.cs.opencover.reportsPaths="${COVERAGE_PATH}**/coverage.opencover.xml" || true;
-
         #/d:sonar.cs.xunit.reportsPaths="${RESULT_PATH}*.xml" \
 fi
 
@@ -49,7 +48,7 @@ fi
 #necessário rodar o dotnet build entre o begin e end do sonarqube
 echo ""
 echo "--------------Iniciando dotnet build $SOLUTION_NAME"
-dotnet build $SOLUTION_NAME -v m --no-restore
+dotnet build $SOLUTION_NAME -v q --no-restore
 
 echo ""
 echo "--------------Iniciando dotnet test"
@@ -67,10 +66,10 @@ for testFolder in $(ls test); do \
     echo $testFolder
 
     echo '------dotnet test------' & \
-    dotnet test test/$testFolder --no-build --no-restore -v m -c ${CONFIGURATION} \
+    dotnet test test/$testFolder --no-build --no-restore -v q -c ${CONFIGURATION} \
         --results-directory "${RESULT_PATH}/" \
         --logger "trx;LogFileName=${testFolder}.trx" \
-        #--logger "xunit;LogFilePath=${RESULT_PATH}${testFolder}.xml"; \
+        --logger "xunit;LogFilePath=${RESULT_PATH}${testFolder}.xml"; \
         exit 0 & \
 
     echo '------coverlet test------' & \

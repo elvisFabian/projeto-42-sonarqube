@@ -78,11 +78,11 @@ sonar.password=bitnami
 ```
 
 ```sh
-docker run --rm -e SONAR_HOST_URL=http://172.17.0.1:4000 -v "/Users/elvis/repo/carguero/motorista.android:/usr/src" sonarsource/sonar-scanner-cli
+docker run --rm -e SONAR_HOST_URL=http://172.17.0.1:9000 -v "/Users/elvis/repo/carguero/motorista.android:/usr/src" sonarsource/sonar-scanner-cli
 ```
 
-# [Sonar](http://localhost:4000/)
-- [Quality Gates](http://localhost:4000/quality_gates/show/1)
-- [Quality Profiles](http://localhost:4000/profiles)
-- [Coding Rules](http://localhost:4000/coding_rules)
-- [marketplace](http://localhost:4000/admin/marketplace)
+# [Sonar](http://localhost:9000/)
+- [Quality Gates](http://localhost:9000/quality_gates/show/1)
+- [Quality Profiles](http://localhost:9000/profiles)
+- [Coding Rules](http://localhost:9000/coding_rules)
+- [marketplace](http://localhost:9000/admin/marketplace)
