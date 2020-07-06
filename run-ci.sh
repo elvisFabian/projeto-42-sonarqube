@@ -21,10 +21,10 @@ export SONARQUBE_PROJECT=${GIT_REPO_NAME}
 export SONARQUBE_PROJECT_VERSION=${VERSION}
 export CONTAINER_NAME="ci-tests-artifacts-${VERSION}"
 export TAG="$GIT_BRANCH-$GIT_SHORT_SHA"
-
+export DOCKER_COMPOSE_CI_PATH="Projeto42.SonarQube/docker-compose.ci.yml"
 
 echo 'Iniciando docker-compose build'
-docker-compose -f Projeto42.SonarQube/docker-compose.ci.yml up --build --force-recreate --abort-on-container-exit
+docker-compose -f ${DOCKER_COMPOSE_CI_PATH} up --build --force-recreate --abort-on-container-exit
 
 echo 'Extraindo artefatos dos testes'
 docker cp ${CONTAINER_NAME}:/TestResults ${ARTIFACT_STAGING_DIRECTORY}/TestResults

@@ -46,10 +46,10 @@ RUN for file in $(ls *.csproj); do mkdir -p test/${file%.*}/ && mv $file test/${
 
 RUN dotnet restore ${SOLUTION_NAME} -v m
 
-COPY . .
-
 #Target: Testes
 FROM restore as tests
+COPY . .
+
 COPY ./entrypoint-tests.sh ./entrypoint-tests.sh
 RUN chmod +x ./entrypoint-tests.sh
 ENTRYPOINT ./entrypoint-tests.sh
