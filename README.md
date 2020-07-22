@@ -73,8 +73,8 @@ sonar-scanner \
 - [Docker - SonarScanner CLI](https://hub.docker.com/r/sonarsource/sonar-scanner-cli)
 
 ```
-sonar.projectKey=motorista.android
-sonar.projectName=motorista.android
+sonar.projectKey=XXX.YYY
+sonar.projectName=XXX.YYY
 sonar.projectVersion=1.0
 sonar.sources=app/src/main/
 sonar.login=admin
@@ -82,7 +82,7 @@ sonar.password=bitnami
 ```
 
 ```sh
-docker run --rm -e SONAR_HOST_URL=http://172.17.0.1:9000 -v "/Users/elvis/repo/carguero/motorista.android:/usr/src" sonarsource/sonar-scanner-cli
+docker run --rm -e SONAR_HOST_URL=http://172.17.0.1:9000 -v "/Users/elvis/repo/carguero/XXX.android:/usr/src" sonarsource/sonar-scanner-cli
 ```
 
 # [Sonar](http://localhost:9000/)
